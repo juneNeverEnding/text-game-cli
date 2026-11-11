@@ -39,7 +39,6 @@ public class GameManager(IRenderer renderer)
         }
 
         _abilities.Add(ability);
-        _renderer.WriteLine($"ability {ability.Name} registered");
     }
 
     public void RegisterItem(IItem item)
@@ -51,7 +50,6 @@ public class GameManager(IRenderer renderer)
         }
 
         _items.Add(item);
-        _renderer.WriteLine($"item {item.Name} registered");
     }
 
     public IAbility? FindAbility(string name) => _abilities.FirstOrDefault(a => a.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
