@@ -90,7 +90,7 @@ public class GameManager(IRenderer renderer)
             _renderer.WriteLine("need atleast 2 characters, use: select name1 name2");
             return;
         }
-
+        _isBattleStarted = true;
         _renderer.WriteHeader("BATTLE START");
         
         foreach (var c in _selectedForBattle)
