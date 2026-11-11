@@ -24,19 +24,21 @@ public class HelpCommand(Dictionary<string, ICommand> commands) : ICommand
         {
             "", 
             "examples:",
-            "   create char",
-            "   create item",
-            "   create ability",
+            "   create char / item / ability",
             "   add --char Bob --item Sword",
             "   add -c Joe -i staff",
             "   add -c Joe -a \"Lightning bolt\"",
+            "   ls chars",
+            "   ls items",
+            "   ls abilities",
+            "   select Bob Joe Evilguy \"Another Joe\"",
+            "   start",
             "   act attack Bob Evilguy",
             "   act ability Joe Evilguy --id \"Lightning bolt\"",
             "   act ability Evilguy Joe -i Fireball",
             "   act ability \"Another Joe\" Bob --id Heal",
-            "   ls chars",
-            "   ls items",
-            "   ls abilities",
+            "   help",
+            "   exit"
         });
 
         return CommandResult.Ok(string.Join("\n", lines));
