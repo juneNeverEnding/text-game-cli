@@ -3,6 +3,8 @@
 Console-based text game made using C# and .NET  
 Create characters, get them items and abilities, select the characters and start the battle  
 
+---
+
 ## Features
 
 - Create characters, give them a name and assign values to their stats (health, armor, power, magic)
@@ -11,6 +13,8 @@ Create characters, get them items and abilities, select the characters and start
 - Select characters for the battle
 - Start and stop battles
 - Turn based combat system (`act` command)
+
+---
 
 ## Used design patterns
 
@@ -21,6 +25,8 @@ Create characters, get them items and abilities, select the characters and start
 | Mediator             | `GameManager` controls the interactions between characters |
 | Facade               | `CliFacade` provides a simple interface for the CLI system |
 | Dependency Injection | Dependencies are passed through constructors               |
+
+---
 
 ## Project structure
 
@@ -38,6 +44,8 @@ text-game-cli/
 |---Program.cs
 |---text-game-cli.csproj
 ```
+
+---
 
 ## Commands
 
@@ -60,6 +68,8 @@ text-game-cli/
 | `act defend <actor>`                          | Character takes a defensive stance    |
 | `help`                                        | Shows available commands              |
 | `exit`                                        | Exits the CLI                         |
+
+---
 
 ## How to run
 
