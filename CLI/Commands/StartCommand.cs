@@ -6,7 +6,7 @@ using TextGameCLI.Application;
 public class StartCommand(GameManager manager) : ICommand
 {
     public string Name => "start";
-    public string Description => "start - starts the battle";
+    public string Description => "starts the battle";
 
     private readonly GameManager _manager = manager;
     

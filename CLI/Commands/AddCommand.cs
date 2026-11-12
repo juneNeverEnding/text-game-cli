@@ -7,7 +7,7 @@ using TextGameCLI.Application;
 public class AddCommand(GameManager manager) : ICommand
 {
     public string Name => "add";
-    public string Description => "add [--char <id/name>] [--item|--ability <id/name>]";
+    public string Description => "add [--char <name>] [--item|--ability <name>]";
     private readonly GameManager _manager = manager;
 
     public CommandResult Execute(string[] args)

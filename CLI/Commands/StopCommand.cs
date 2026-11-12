@@ -6,7 +6,7 @@ using TextGameCLI.Application;
 public class StopCommand(GameManager manager) : ICommand
 {
     public string Name => "stop";
-    public string Description => "stop - ends the current battle";
+    public string Description => "ends the current battle";
 
     private readonly GameManager _manager = manager;
 
