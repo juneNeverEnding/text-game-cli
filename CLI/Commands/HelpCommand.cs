@@ -38,6 +38,7 @@ public class HelpCommand(Dictionary<string, ICommand> commands) : ICommand
             "   act ability Evilguy Joe -i Fireball",
             "   act ability \"Another Joe\" Bob --id Heal",
             "   stop",
+            "   history",
             "   help",
             "   exit"
         });

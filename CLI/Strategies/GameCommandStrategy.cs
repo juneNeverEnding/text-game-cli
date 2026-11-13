@@ -18,7 +18,8 @@ public class GameCommandStrategy : ICommandStrategy
             ["ls"]      = new LsCommand(manager),
             ["select"]  = new SelectCommand(manager),
             ["start"]   = new StartCommand(manager),
-            ["stop"]    = new StopCommand(manager)
+            ["stop"]    = new StopCommand(manager),
+            ["history"] = new HistoryCommand(manager)
         };
         _commands["help"] = new HelpCommand(_commands);
     }
