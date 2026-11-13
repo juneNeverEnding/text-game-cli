@@ -3,6 +3,7 @@ namespace TextGameCLI.Application;
 using TextGameCLI.Core;
 using TextGameCLI.Core.Battle;
 using TextGameCLI.Core.Characters;
+using TextGameCLI.Core.Combat;
 
 public class GameManager(IRenderer renderer)
 {
@@ -150,7 +151,11 @@ public class GameManager(IRenderer renderer)
             _renderer.WriteLine("character not found");
             return;
         }
+        
+        int damage = DamageCalculator.CalculatePhysical(attacker, target);
+        string desc = $"{attackerName} attacks {targetName} for {damage} dmg";
         attacker.Attack(target);
+        _currentBattle?.Record(attackerName, "attack", targetName, damage, desc);
     }
 
     public void Heal(string healerName, string targetName, int amount)
@@ -164,7 +169,10 @@ public class GameManager(IRenderer renderer)
             _renderer.WriteLine("character not found");
             return;
         }
+
+        string desc = $"{healerName} heals {targetName} for {amount}";
         healer.Heal(amount, target);
+        _currentBattle?.Record(healerName, "heal", targetName, amount, desc);
     }
 
     public void Defend(string characterName)
@@ -173,6 +181,9 @@ public class GameManager(IRenderer renderer)
 
         var character = FindCharacter(characterName);
         character?.Defend();
+
+        string desc = $"{characterName} takes a defensive stance";
+        _currentBattle?.Record(characterName, "defend", null, 0, desc);
     }
 
     public void UseAbility(string userName, string abilityName, string? targetName = null)
@@ -185,7 +196,13 @@ public class GameManager(IRenderer renderer)
         Character? target = null;
         if (targetName != null) target = FindCharacter(targetName);
 
-        user.UseAbility(abilityName, target);
+        IAbility? ability = null;
+        if (abilityName != null) ability = FindAbility(abilityName);
+
+        int value = ability!.Execute(user, target);
+        string desc = $"{userName} used {abilityName}" + (target != null ? $"on {targetName}" : "");
+        user.UseAbility(abilityName!, target);
+        _currentBattle?.Record(userName, "Ability", targetName, value, desc);
     }
 
     public void EquipItem(string characterName, string itemName)
@@ -220,6 +237,19 @@ public class GameManager(IRenderer renderer)
             return;
         }
         character.AddAbility(ability);
+    }
+
+    public void ShowHistory()
+    {
+        if (_currentBattle == null || _currentBattle.History.Count == 0)
+        {
+            _renderer.WriteLine("no battle history yet");
+            return;
+        }
+
+        _renderer.WriteHeader("BATTLE HISTORY");
+        foreach (var turn in _currentBattle.History)
+            _renderer.WriteLine(turn.ToString());
     }
 
     public void ListCharacters()
