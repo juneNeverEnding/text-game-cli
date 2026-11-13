@@ -7,5 +7,5 @@ namespace TextGameCLI.Core.Characters;
 public interface IAbility
 {
     string Name { get; }
-    void Execute(Character user, Character? target);
+    int Execute(Character user, Character? target);
 }
