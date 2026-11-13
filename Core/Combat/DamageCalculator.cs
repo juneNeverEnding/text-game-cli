@@ -13,8 +13,8 @@ public static class DamageCalculator
 
     public static int CalculateMagic(Character attacker, Character target)
     {
-        const double resistance = 0.20;
+        double multiplier = 1.0 - target.Resistance;
         int raw = (int)(attacker.Magic * 1.45);
-        return Math.Max(1, (int)(raw * (1.0 - resistance)));
+        return Math.Max(1, (int)(raw * multiplier));
     }
 }
