@@ -274,7 +274,7 @@ public class GameManager(IRenderer renderer)
         foreach (var c in _characters)
         {
             string selected = _selectedForBattle.Contains(c) ? " [SELECTED]" : "";
-            _renderer.WriteLine($"{c.Name} | health: {c.Health}/{c.MaxHealth} | armor: {c.Armor} | power: {c.Power} | magic: {c.Magic} | alive: {c.IsAlive}{selected}");
+            _renderer.WriteLine($"{c.Name} | health: {c.Health}/{c.MaxHealth} | armor: {c.Armor} | power: {c.Power} | magic: {c.Magic} | resistance: {c.Resistance} | alive: {c.IsAlive}{selected}");
         }
     }
 
