@@ -7,12 +7,13 @@ Create characters, get them items and abilities, select the characters and start
 
 ## Features
 
-- Create characters, give them a name and assign values to their stats (health, armor, power, magic)
+- Create characters, give them a name and assign values to their stats (health, armor, power, magic, resistance)
 - Create items and abilities
 - Add items and abilities to characters
 - Select characters for the battle
 - Start and stop battles
 - Turn based combat system (`act` command)
+- Battle history (`history` command)
 
 ---
 
@@ -32,18 +33,40 @@ Create characters, get them items and abilities, select the characters and start
 
 ```text
 text-game-cli/
-|---Application/ (has GameManager)
+|---Application/      # has GameManager
 |---CLI/
 |   |---Commands/     # command classes
 |   |---Strategies/   # command grouping
 |   |---CliFacade.cs  # CLI entry point
 |---Core/
+|   |---Battle/       # battle, turns
 |   |---Characters/   # domain models of characters, abilities, items
+|   |---Combat/       # has DamageCalculator, which has formulas for physical and magic damage
 |   |--- ...          # interfaces and base classes
 |---Infra/            # infrastructure, for now has just ConsoleRenderer.cs
 |---Program.cs
 |---text-game-cli.csproj
 ```
+
+---
+
+## Combat formulas
+
+### Physical damage
+
+```text
+damage = max(0, Power - effectiveArmor)
+effectiveArmor = Armor * 2 (if the target is defending)
+effectiveArmor = armor     (if the target is not defending)
+```
+
+### Magic damage
+
+```text
+raw     = Magic * 1.45
+damage  = max(1, raw * (1 - Resistance))
+```
+`Resistance` is a value between 0.0 and 0.9
 
 ---
 
@@ -66,6 +89,7 @@ text-game-cli/
 | `act ability <actor> <target> --id <ability>` | Character uses an ability on a target |
 | `act heal <actor> <target>`                   | Character heals a target              |
 | `act defend <actor>`                          | Character takes a defensive stance    |
+| `history`                                     | Shows current battle history          |
 | `help`                                        | Shows available commands              |
 | `exit`                                        | Exits the CLI                         |
 
