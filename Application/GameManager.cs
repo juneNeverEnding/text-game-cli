@@ -1,6 +1,7 @@
 namespace TextGameCLI.Application;
 
 using TextGameCLI.Core;
+using TextGameCLI.Core.Battle;
 using TextGameCLI.Core.Characters;
 
 public class GameManager(IRenderer renderer)
@@ -10,15 +11,15 @@ public class GameManager(IRenderer renderer)
     private readonly List<IAbility> _abilities = [];
     private readonly List<IItem> _items = [];
     private readonly List<Character> _selectedForBattle = [];
-    private bool _isBattleStarted = false;
+    private Battle? _currentBattle;
 
     public IReadOnlyList<Character> Characters => _characters.AsReadOnly();
     public IReadOnlyList<Character> Selected => _selectedForBattle.AsReadOnly();
-    public bool IsBattleStarted => _isBattleStarted;
+    public bool IsBattleStarted => _currentBattle?.IsActive ?? false;
 
     public void AddCharacter(Character character)
     {
-        if (_isBattleStarted)
+        if (IsBattleStarted)
         {
             _renderer.WriteLine("cannot add characters during battle, use 'stop' first");
             return;
@@ -28,11 +29,9 @@ public class GameManager(IRenderer renderer)
         _renderer.WriteLine($"{character.Name} added");
     }
 
-    public Character? FindCharacter(string name) => _characters.FirstOrDefault(c => c.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
-
     public void RegisterAbility(IAbility ability)
     {
-        if (_isBattleStarted)
+        if (IsBattleStarted)
         {
             _renderer.WriteLine("cannot register abilities during battle, use 'stop' first");
             return;
@@ -43,7 +42,7 @@ public class GameManager(IRenderer renderer)
 
     public void RegisterItem(IItem item)
     {
-        if (_isBattleStarted)
+        if (IsBattleStarted)
         {
             _renderer.WriteLine("cannot register items during battle, use 'stop' first");
             return;
@@ -52,12 +51,13 @@ public class GameManager(IRenderer renderer)
         _items.Add(item);
     }
 
+    public Character? FindCharacter(string name) => _characters.FirstOrDefault(c => c.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
     public IAbility? FindAbility(string name) => _abilities.FirstOrDefault(a => a.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
     public IItem? FindItem(string name) => _items.FirstOrDefault(i => i.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
 
     public void SelectCharacters(string[] names)
     {
-        if (_isBattleStarted)
+        if (IsBattleStarted)
         {
             _renderer.WriteLine("cannot change selection during battle, use 'stop' first");
             return;
@@ -77,7 +77,7 @@ public class GameManager(IRenderer renderer)
 
     public void StartBattle()
     {
-        if (_isBattleStarted)
+        if (IsBattleStarted)
         {
             _renderer.WriteLine("battle is already in progress");
             return;
@@ -88,7 +88,10 @@ public class GameManager(IRenderer renderer)
             _renderer.WriteLine("need atleast 2 characters, use: select name1 name2");
             return;
         }
-        _isBattleStarted = true;
+        
+        _currentBattle = new Battle();
+        _currentBattle.Start(_selectedForBattle);
+
         _renderer.WriteHeader("BATTLE START");
         
         foreach (var c in _selectedForBattle)
@@ -98,19 +101,19 @@ public class GameManager(IRenderer renderer)
 
     public void StopBattle()
     {
-        if (!_isBattleStarted)
+        if (!IsBattleStarted)
         {
             _renderer.WriteLine("no battle is currently running");
             return;
         }
 
-        _isBattleStarted = false;
+        _currentBattle?.Stop();
         _renderer.WriteLine("battle stopped");
     }
 
     private bool CanAct(string actorName, string? targetName = null)
     {
-        if (!_isBattleStarted)
+        if (!IsBattleStarted)
         {
             _renderer.WriteLine("battle has not started yet, use 'start' first");
             return false;
@@ -187,7 +190,7 @@ public class GameManager(IRenderer renderer)
 
     public void EquipItem(string characterName, string itemName)
     {
-        if (_isBattleStarted)
+        if (IsBattleStarted)
         {
             _renderer.WriteLine("cannot equip items during battle");
             return;
@@ -204,7 +207,7 @@ public class GameManager(IRenderer renderer)
 
     public void AddAbilityToCharacter(string characterName, string abilityName)
     {
-        if (_isBattleStarted)
+        if (IsBattleStarted)
         {
             _renderer.WriteLine("cannot add abilities during battle");
             return;
