@@ -30,7 +30,7 @@ public class Character
         Armor = armor;
         Power = power;
         Magic = magic;
-        Resistance = resistance;
+        Resistance = Math.Clamp(resistance, 0.0, 0.9);
     }
 
     public IReadOnlyList<IAbility> Abilities => _abilities.AsReadOnly();
