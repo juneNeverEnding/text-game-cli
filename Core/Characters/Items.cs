@@ -21,7 +21,8 @@ public class WarriorArmor : IItem
     {
         character.ModifyStats(armorDelta: 6);
         character.ModifyStats(powerDelta: 6);
-        Console.WriteLine($"{character.Name}'s stat update: armor: {character.Armor}, power: {character.Power}");
+        character.ModifyStats(resistanceDelta: 0.1);
+        Console.WriteLine($"{character.Name}'s stat update: armor: {character.Armor}, power: {character.Power}, resistance: {character.Resistance}");
     }
 }
 
@@ -32,7 +33,8 @@ public class Robes : IItem
     {
         character.ModifyStats(armorDelta: 2);
         character.ModifyStats(magicDelta: 6);
-        Console.WriteLine($"{character.Name}'s stat update: armor: {character.Armor}, magic: {character.Magic}");
+        character.ModifyStats(resistanceDelta: 0.15);
+        Console.WriteLine($"{character.Name}'s stat update: armor: {character.Armor}, magic: {character.Magic}, resistance: {character.Resistance}");
     }
 }
 
@@ -83,5 +85,15 @@ public class HealthPotion : IItem
     public void Apply(Character character)
     {
         character.ReceiveHeal(25);
+    }
+}
+
+public class ResistancePotion : IItem
+{
+    public string Name => "Resistance Potion";
+    public void Apply(Character character)
+    {
+        character.ModifyStats(resistanceDelta: 0.1);
+        Console.WriteLine($"{character.Name}'s stat update: resistance: {character.Resistance}");
     }
 }
