@@ -127,12 +127,23 @@ public class GameManager(IRenderer renderer)
             return false;
         }
 
+        if (!actor.IsAlive)
+        {
+            Console.WriteLine($"{actorName} is defeated and cannot act");
+            return false;
+        }
+
         if (targetName != null)
         {
             var target = FindCharacter(targetName);
             if (target == null || !_selectedForBattle.Contains(target))
             {
                 _renderer.WriteLine($"{targetName} is not in the current battle");
+                return false;
+            }
+            if (!target.IsAlive)
+            {
+                _renderer.WriteLine($"cannot target defeated character {target.Name}");
                 return false;
             }
         }
