@@ -1,5 +1,7 @@
 namespace TextGameCLI.Core.Characters;
 
+using TextGameCLI.Core.Combat;
+
 /// <summary>
 /// character template
 /// </summary>
@@ -36,7 +38,7 @@ public class Character
     public void Attack(Character target)
     {
         if (!CanAct(target)) return;
-        int Damage = Math.Max(0, Power - (target._isDefending ? target.Armor * 2 : target.Armor));
+        int Damage = DamageCalculator.CalculatePhysical(this, target);
         target.TakeDamage(Damage);
         Console.WriteLine($"{Name} attacks {target.Name} and dealt {Damage} damage\n{target.Name}'s current health: {target.Health}");
         target._isDefending = false; //incase the target is defending

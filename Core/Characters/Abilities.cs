@@ -1,5 +1,6 @@
 namespace TextGameCLI.Core.Characters;
 
+using TextGameCLI.Core.Combat;
 ///<summary>
 /// abilities
 ///</summary>
@@ -11,7 +12,7 @@ public class LightningBolt : IAbility
     {
         if (target is null) return;
 
-        int magicDamage = (int)Math.Round(user.Magic * 1.5);
+        int magicDamage = DamageCalculator.CalculateMagic(user, target);
         target.TakeDamage(magicDamage);
         Console.WriteLine($"{user.Name} casts a {Name} on {target.Name} and dealt {magicDamage} damage\n{target.Name}'s current health: {target.Health}");
     }
@@ -24,7 +25,7 @@ public class Fireball : IAbility
     {
         if (target is null) return;
 
-        int magicDamage = (int)Math.Round(user.Magic * 1.5);
+        int magicDamage = DamageCalculator.CalculateMagic(user, target);
         target.TakeDamage(magicDamage);
         Console.WriteLine($"{user.Name} casts a {Name} on {target.Name} and dealt {magicDamage} damage\n{target.Name}'s current health: {target.Health}");
     }
