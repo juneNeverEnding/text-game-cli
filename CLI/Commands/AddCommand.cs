@@ -32,13 +32,13 @@ public class AddCommand(GameManager manager) : ICommand
         if (itemName != null)
         {   
             _manager.EquipItem(charName, itemName);
-            return CommandResult.Ok($"item '{itemName}' added to {charName}");
+            return CommandResult.Ok();
         }
 
         if (abilityName != null)
         {            
             _manager.AddAbilityToCharacter(charName, abilityName);
-            return CommandResult.Ok($"ability '{abilityName}' added to {charName}");
+            return CommandResult.Ok();
         }
         return CommandResult.Fail("specify either --item or --ability");
     }

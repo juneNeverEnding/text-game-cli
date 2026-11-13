@@ -230,6 +230,7 @@ public class GameManager(IRenderer renderer)
             return;
         }
         character.Equip(item);
+        _renderer.WriteLine($"item '{itemName}' added to {characterName}");
     }
 
     public void AddAbilityToCharacter(string characterName, string abilityName)
@@ -247,6 +248,7 @@ public class GameManager(IRenderer renderer)
             return;
         }
         character.AddAbility(ability);
+        _renderer.WriteLine($"ability '{abilityName}' added to {characterName}");
     }
 
     public void ShowHistory()
