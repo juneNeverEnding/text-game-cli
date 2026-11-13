@@ -36,7 +36,7 @@ public class CreateCommand(GameManager manager) : ICommand
         int.TryParse(Console.ReadLine(), out int power);
         Console.Write("magic: ");
         int.TryParse(Console.ReadLine(), out int magic);
-        Console.Write("resistance (0-100): ");
+        Console.Write("resistance (0-90): ");
         int.TryParse(Console.ReadLine(), out int intResistance);
 
         double resistance = intResistance / 100.0;
