@@ -39,7 +39,7 @@ public class CreateCommand(GameManager manager) : ICommand
         Console.Write("resistance (0-100): ");
         int.TryParse(Console.ReadLine(), out int intResistance);
 
-        double resistance = intResistance / 100;
+        double resistance = intResistance / 100.0;
         var character = new Character(name, health > 0 ? health : 100, armor, power, magic, resistance);
         _manager.AddCharacter(character);
 
