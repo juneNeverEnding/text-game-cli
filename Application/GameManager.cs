@@ -201,7 +201,6 @@ public class GameManager(IRenderer renderer)
 
         int value = ability!.Execute(user, target);
         string desc = $"{userName} used {abilityName}" + (target != null ? $"on {targetName}" : "");
-        user.UseAbility(abilityName!, target);
         _currentBattle?.Record(userName, "Ability", targetName, value, desc);
     }
 
