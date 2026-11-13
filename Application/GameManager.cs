@@ -129,7 +129,7 @@ public class GameManager(IRenderer renderer)
 
         if (!actor.IsAlive)
         {
-            Console.WriteLine($"{actorName} is defeated and cannot act");
+            _renderer.WriteLine($"{actorName} is defeated and cannot act");
             return false;
         }
 
