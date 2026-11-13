@@ -15,13 +15,14 @@ public class Character
     public int Armor { get; private set; }
     public int Power { get; private set; }
     public int Magic { get; private set; }
+    public double Resistance { get; private set; }
 
     public bool IsAlive { get; private set; } = true;
     private readonly List<IAbility> _abilities = [];
     private readonly List<IItem> _inventory = [];
     private bool _isDefending;
 
-    public Character(string name, int health, int armor, int power, int magic)
+    public Character(string name, int health, int armor, int power, int magic, double resistance)
     {
         //setting stats on the character
         Name = name;
@@ -29,6 +30,7 @@ public class Character
         Armor = armor;
         Power = power;
         Magic = magic;
+        Resistance = resistance;
     }
 
     public IReadOnlyList<IAbility> Abilities => _abilities.AsReadOnly();
@@ -97,12 +99,13 @@ public class Character
 
     internal void AddItem(IItem item) => _inventory.Add(item);
 
-    internal void ModifyStats(int healthDelta = 0, int armorDelta = 0, int powerDelta = 0, int magicDelta = 0)
+    internal void ModifyStats(int healthDelta = 0, int armorDelta = 0, int powerDelta = 0, int magicDelta = 0, double resistanceDelta = 0)
     {
         if (!IsAlive) return;
         MaxHealth += healthDelta;
         Armor += armorDelta;
         Power += powerDelta;
         Magic += magicDelta;
+        Resistance += resistanceDelta;
     }
 }

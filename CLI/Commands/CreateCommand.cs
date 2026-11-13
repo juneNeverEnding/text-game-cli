@@ -36,8 +36,11 @@ public class CreateCommand(GameManager manager) : ICommand
         int.TryParse(Console.ReadLine(), out int power);
         Console.Write("magic: ");
         int.TryParse(Console.ReadLine(), out int magic);
+        Console.Write("resistance (0-100): ");
+        int.TryParse(Console.ReadLine(), out int intResistance);
 
-        var character = new Character(name, health > 0 ? health : 100, armor, power, magic);
+        double resistance = intResistance / 100;
+        var character = new Character(name, health > 0 ? health : 100, armor, power, magic, resistance);
         _manager.AddCharacter(character);
 
         return CommandResult.Ok($"character '{name}' created");
