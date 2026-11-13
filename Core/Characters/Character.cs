@@ -37,7 +37,6 @@ public class Character
 
     public void Attack(Character target)
     {
-        if (!CanAct(target)) return;
         int Damage = DamageCalculator.CalculatePhysical(this, target);
         target.TakeDamage(Damage);
         Console.WriteLine($"{Name} attacks {target.Name} and dealt {Damage} damage\n{target.Name}'s current health: {target.Health}");
@@ -46,7 +45,6 @@ public class Character
 
     public void Heal(int amount, Character target)
     {
-        if (!CanAct(target)) return;
         target.ReceiveHeal(amount);
         Console.WriteLine($"{Name} heals {target.Name} for {amount}\n{target.Name}'s current health: {target.Health}");
     }
@@ -80,7 +78,6 @@ public class Character
 
     public void UseAbility(string abilityName, Character? target = null)
     {
-        if (!CanAct(target)) return;
         var ability = _abilities.FirstOrDefault(a => a.Name == abilityName);
         if (ability is null)
         {
@@ -107,20 +104,5 @@ public class Character
         Armor += armorDelta;
         Power += powerDelta;
         Magic += magicDelta;
-    }
-
-    private bool CanAct(Character? target = null) //made a private bool so i can just reuse this instead to check if whether the target is alive or not
-    {
-        if (!IsAlive)
-        {
-            Console.WriteLine($"{Name} is defeated and cannot act");
-            return false;
-        }
-        if (target != null && !target.IsAlive)
-        {
-            Console.WriteLine($"cannot target defeated character {target.Name}");
-            return false;
-        }
-        return true;
     }
 }
