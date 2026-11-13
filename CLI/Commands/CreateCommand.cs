@@ -62,6 +62,7 @@ public class CreateCommand(GameManager manager) : ICommand
             "strength_pot" => new StrengthPotion(),
             "magic_pot" => new MagicPotion(),
             "heatlh_pot" => new HealthPotion(),
+            "resistance_pot" => new ResistancePotion(),
             _ => null
         };
 
