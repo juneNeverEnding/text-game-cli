@@ -83,7 +83,7 @@ damage  = max(1, raw * (1 - Resistance))
 
 Game state is serialized to JSON using `System.Text.Json`  
 Saves are located in `%LocalAppData%/TextGameCLI/saves/` (Windows)  
-There are named saves, and there's also the last save which is called `_last.json`, it updates on every `save`
+There are named saves, and there's also the last save which is called `_last.json`, it updates on every `save`  
 
 ### What is stored
 
