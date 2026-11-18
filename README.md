@@ -14,6 +14,7 @@ Create characters, get them items and abilities, select the characters and start
 - Start and stop battles
 - Turn based combat system (`act` command)
 - Battle history (`history` command)
+- Save and load the game (`save <name>` and `load [name]` commands)
 
 ---
 
@@ -25,6 +26,8 @@ Create characters, get them items and abilities, select the characters and start
 | Strategy             | `GameCommandStrategy` groups the commands                  |
 | Mediator             | `GameManager` controls the interactions between characters |
 | Facade               | `CliFacade` provides a simple interface for the CLI system |
+| Memento              | `GameManager` creates/restores `GameMemento` snapshots     |
+| Repository           | `JsonRepository` persists saves to disk                    |
 | Dependency Injection | Dependencies are passed through constructors               |
 
 ---
@@ -33,17 +36,23 @@ Create characters, get them items and abilities, select the characters and start
 
 ```text
 text-game-cli/
-|---Application/      # has GameManager
+|---Application/            # has GameManager
 |---CLI/
-|   |---Commands/     # command classes
-|   |---Strategies/   # command grouping
-|   |---CliFacade.cs  # CLI entry point
+|   |---Commands/           # command classes
+|   |---Strategies/         # command grouping
+|   |---CliFacade.cs        # CLI entry point
 |---Core/
-|   |---Battle/       # battle, turns
-|   |---Characters/   # domain models of characters, abilities, items
-|   |---Combat/       # has DamageCalculator, which has formulas for physical and magic damage
-|   |--- ...          # interfaces and base classes
-|---Infra/            # infrastructure, for now has just ConsoleRenderer.cs
+|   |---Battle/             # battle, turns
+|   |---Characters/         # domain models of characters, abilities, items
+|   |---Combat/             # has DamageCalculator, which has formulas for physical and magic damage
+|   |---Memento/            # IMemento, GameMemento
+|   |--- ...                # interfaces and base classes
+|---Infra/
+|   |---ConsoleRenderer.cs
+|   |---Persistence/
+|   |   |---Models/         # models for saving data
+|   |   |---IRepository.cs  
+|   |   |---JsonRepository.cs
 |---Program.cs
 |---text-game-cli.csproj
 ```
@@ -70,6 +79,23 @@ damage  = max(1, raw * (1 - Resistance))
 
 ---
 
+## Persistence
+
+Game state is serialized to JSON using `System.Text.Json`  
+Saves are located in `%LocalAppData%/TextGameCLI/saves/` (Windows)  
+There are named saves, and there's also the last save which is called `_last.json`, it updates on every `save`
+
+### What is stored
+
+- All characters, their stats, HP, whether if they're alive or not
+- Abilities and items
+- Which abilities or items each character has
+- Selected battle roster
+- Whether if there's a battle ongoing
+- Battle history
+
+---
+
 ## Commands
 
 | Command                                       | Description                           |
@@ -82,6 +108,7 @@ damage  = max(1, raw * (1 - Resistance))
 | `ls chars`                                    | Lists all created characters          |
 | `ls items`                                    | Lists all created items               |
 | `ls abilities`                                | Lists all created abilities           |
+| `ls saves`                                    | Lists all saves                       |
 | `select <char1> <char2> ...`                  | Selects characters for the battle     |
 | `start`                                       | Starts the battle                     |
 | `stop`                                        | Stops the battle                      |
@@ -90,6 +117,8 @@ damage  = max(1, raw * (1 - Resistance))
 | `act heal <actor> <target>`                   | Character heals a target              |
 | `act defend <actor>`                          | Character takes a defensive stance    |
 | `history`                                     | Shows current battle history          |
+| `save <name>`                                 | Saves the game with a name            |
+| `load [name]`                                 | Loads a save, if entered without a name it loads the last save |
 | `help`                                        | Shows available commands              |
 | `exit`                                        | Exits the CLI                         |
 
