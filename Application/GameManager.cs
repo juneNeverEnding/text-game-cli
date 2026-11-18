@@ -4,10 +4,14 @@ using TextGameCLI.Core;
 using TextGameCLI.Core.Battle;
 using TextGameCLI.Core.Characters;
 using TextGameCLI.Core.Combat;
+using TextGameCLI.Core.Memento;
+using TextGameCLI.Infra.Persistence;
+using TextGameCLI.Infra.Persistence.Models;
 
-public class GameManager(IRenderer renderer)
+public class GameManager(IRenderer renderer, IRepository saves)
 {
     private readonly IRenderer _renderer = renderer;
+    private readonly IRepository _saves = saves;
     private readonly List<Character> _characters = [];
     private readonly List<IAbility> _abilities = [];
     private readonly List<IItem> _items = [];
@@ -263,6 +267,193 @@ public class GameManager(IRenderer renderer)
         foreach (var turn in _currentBattle.History)
             _renderer.WriteLine(turn.ToString());
     }
+
+    public IMemento CreateMemento(string name)
+    {
+        return new GameMemento(
+            name,
+            [.. _characters.Select(c => new CharacterData
+            (
+                c.Name,
+                c.MaxHealth,
+                c.Health,
+                c.Armor,
+                c.Power,
+                c.Magic,
+                c.Resistance,
+                c.IsAlive,
+                [.. c.Abilities.Select(a => a.Name)],
+                [.. c.Inventory.Select(i => i.Name)]
+            ))],
+            [.. _abilities.Select(a => new AbilityData
+            (
+                a.Name,
+                a.GetType().Name
+            ))],
+            [.. _items.Select(i => new ItemData
+            (
+                i.Name,
+                i.GetType().Name
+            ))],
+            [.. _selectedForBattle.Select(c => c.Name)],
+            IsBattleStarted,
+            _currentBattle?.History.Select(t => new TurnData
+            (
+                t.Number,
+                t.Actor,
+                t.Action,
+                t.Target,
+                t.Value,
+                t.Description
+            )).ToList() ?? []
+        );
+    }
+
+    public void RestoreMemento(IMemento memento)
+    {
+        if (memento is not GameMemento game)
+        {
+            _renderer.WriteLine("invalid memento type");
+            return;
+        }
+
+        _characters.Clear();
+        _abilities.Clear();
+        _items.Clear();
+        _selectedForBattle.Clear();
+        _currentBattle = null;
+
+        foreach (var a in game.Abilities)
+        {
+            var ab = CreateAbility(a.Type);
+            if (ab != null) _abilities.Add(ab);
+        }
+
+        foreach (var i in game.Items)
+        {
+            var item = CreateItem(i.Type);
+            if (item != null) _items.Add(item);
+        }
+
+        foreach (var cd in game.Characters)
+        {
+            var ch = new Character(cd.Name, cd.MaxHealth, cd.Armor, cd.Power, cd.Magic, cd.Resistance);
+
+            if (cd.Health < cd.MaxHealth)
+                ch.TakeDamage(cd.MaxHealth - cd.Health);
+            
+            if (!cd.IsAlive && ch.IsAlive)
+                ch.TakeDamage(ch.Health);
+            
+            foreach (var abName in cd.AbilityNames)
+            {
+                var ab = FindAbility(abName);
+                if (ab != null) ch.AddAbility(ab);
+            }
+
+            foreach (var itemName in cd.ItemNames)
+            {
+                var item = FindItem(itemName);
+                if (item != null) ch.AddItem(item);
+            }
+            _characters.Add(ch);
+        }
+
+        foreach (var name in game.SelectedCharacterNames)
+        {
+            var ch = FindCharacter(name);
+            if (ch != null) _selectedForBattle.Add(ch);
+        }
+
+        if (game.IsBattleActive && _selectedForBattle.Count >= 2)
+        {
+            _currentBattle = new Battle();
+            _currentBattle.Start(_selectedForBattle);
+            foreach (var t in game.BattleHistory)
+                _currentBattle.Record(t.Actor, t.Action, t.Target, t.Value, t.Description);
+        }
+        
+        _renderer.WriteLine($"state restored from memento {game.Name}");
+    }
+
+    public void Save(string saveName)
+    {
+        var memento = (GameMemento)CreateMemento(saveName);
+
+        var save = new GameSaveData
+        {
+            SaveName = saveName,
+            Characters = memento.Characters,
+            Abilities = memento.Abilities,
+            Items = memento.Items,
+            SelectedCharacterNames = memento.SelectedCharacterNames,
+            IsBattleActive = memento.IsBattleActive,
+            BattleHistory = memento.BattleHistory
+        };
+
+        _saves.Save(saveName, save);
+        _renderer.WriteLine($"saved as {saveName}");
+    }
+
+    public void Load(string? saveName)
+    {
+        GameSaveData? save = string.IsNullOrWhiteSpace(saveName)
+            ? _saves.LoadLast()
+            : _saves.Load(saveName);
+
+        if (save is null)
+        {
+            _renderer.WriteLine(saveName is null ? "no last save found" : $"save {saveName} not found");
+            return;
+        }
+
+        var memento = new GameMemento(
+            save.SaveName,
+            save.Characters,
+            save.Abilities,
+            save.Items,
+            save.SelectedCharacterNames,
+            save.IsBattleActive,
+            save.BattleHistory
+        );
+
+        RestoreMemento(memento);
+    }
+
+    public void ListSaves()
+    {
+        var names = _saves.ListSaves().ToList();
+        if (names.Count == 0)
+        {
+            _renderer.WriteLine("no saves");
+            return;
+        }
+
+        foreach (var n in names)
+            _renderer.WriteLine(n);
+    }
+
+    private static IAbility? CreateAbility(string type) => type switch
+    {
+        nameof(Fireball) => new Fireball(),
+        nameof(LightningBolt) => new LightningBolt(),
+        nameof(Heal) => new Heal(),
+        _ => null
+    };
+
+    private static IItem? CreateItem(string type) => type switch
+    {
+        nameof(Sword) => new Sword(),
+        nameof(Staff) => new Staff(),
+        nameof(Armor) => new Armor(),
+        nameof(WarriorArmor) => new WarriorArmor(),
+        nameof(Robes) => new Robes(),
+        nameof(HealthPotion) => new HealthPotion(),
+        nameof(StrengthPotion) => new StrengthPotion(),
+        nameof(MagicPotion) => new MagicPotion(),
+        nameof(ResistancePotion) => new ResistancePotion(),
+        _ => null
+    };
 
     public void ListCharacters()
     {
