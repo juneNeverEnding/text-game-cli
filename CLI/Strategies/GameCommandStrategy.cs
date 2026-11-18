@@ -19,7 +19,9 @@ public class GameCommandStrategy : ICommandStrategy
             ["select"]  = new SelectCommand(manager),
             ["start"]   = new StartCommand(manager),
             ["stop"]    = new StopCommand(manager),
-            ["history"] = new HistoryCommand(manager)
+            ["history"] = new HistoryCommand(manager),
+            ["save"]    = new SaveCommand(manager),
+            ["load"]    = new LoadCommand(manager)
         };
         _commands["help"] = new HelpCommand(_commands);
     }
