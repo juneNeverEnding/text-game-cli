@@ -31,6 +31,7 @@ public class HelpCommand(Dictionary<string, ICommand> commands) : ICommand
             "   ls chars",
             "   ls items",
             "   ls abilities",
+            "   ls saves",
             "   select Bob Joe Evilguy \"Another Joe\"",
             "   start",
             "   act attack Bob Evilguy",
@@ -40,6 +41,8 @@ public class HelpCommand(Dictionary<string, ICommand> commands) : ICommand
             "   stop",
             "   history",
             "   help",
+            "   save SaveName",
+            "   load SaveName",
             "   exit"
         });
 
