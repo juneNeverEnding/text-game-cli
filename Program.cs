@@ -1,5 +1,6 @@
 ﻿using TextGameCLI.Core;
 using TextGameCLI.Infra;
+using TextGameCLI.Infra.Persistence;
 using TextGameCLI.Application;
 using TextGameCLI.CLI;
 using TextGameCLI.CLI.Strategies;
@@ -9,8 +10,9 @@ class Program
     static void Main(string[] args)
     {
         IRenderer renderer = new ConsoleRenderer();
+        IRepository saves = new JsonRepository();
 
-        var gameManager = new GameManager(renderer);
+        var gameManager = new GameManager(renderer, saves);
 
         var cli = new CliFacade(renderer);
         cli.UseStrategy(new GameCommandStrategy(gameManager));
