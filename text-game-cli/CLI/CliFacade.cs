@@ -12,6 +12,7 @@ public class CliFacade(IRenderer renderer)
     public void UseStrategy(ICommandStrategy strategy)
     {
         _commands.Clear();
+        strategy.Register((name, command) => _commands[name] = command);
     }
 
     public CommandResult Execute(string input)
