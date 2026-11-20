@@ -26,12 +26,9 @@ public class GameCommandStrategy : ICommandStrategy
         _commands["help"] = new HelpCommand(_commands);
     }
 
-    public void Register(Action<string, Func<string[], CommandResult>> register)
+    public void Register(Action<string, ICommand> register)
     {
         foreach (var (name, command) in _commands)
-        {
-            register(name, command.Execute);
-        }
+            register(name, command);
     }
-    public IEnumerable<string> GetCommandNames() => _commands.Keys;
 }
