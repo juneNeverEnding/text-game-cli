@@ -1,9 +1,57 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="TextGameGUI.MainWindow"
-        Title="Text Game GUI">
-    Welcome to Avalonia!
+        Title="text game"
+        Width="960" Height="600"
+        MinWidth="720" MinHeight="420">
+
+    <Grid Margin="12" RowDefinitions="Auto, *,Auto" ColumnDefinitions="*,240">
+
+        <TextBlock Grid.Row="0" Grid.ColumnSpan="2"
+                   Text="text game"
+                   FontSize="20" FontWeight="Bold"
+                   Margin="0,0,0,10"/>
+
+        <Border Grid.Row="1" Grid.Column="0"
+                BorderBrush="#444" BorderThickness="1"
+                CornerRadius="4" Margin="0,0,12,10">
+            <ScrollViewer x:Name="OutputScroll" VerticalScrollBarVisibility="Auto">
+                <TextBox x:Name="OutputBox"
+                         IsReadOnly="True"
+                         AcceptsReturn="True"
+                         TextWrapping="Wrap"
+                         BorderThickness="0"
+                         FontSize="13"/>
+            </ScrollViewer>
+        </Border>
+
+        <DockPanel Grid.Row="1" Grid.Column="1" Margin="0,0,0,10">
+            <TextBlock DockPanel.Dock="Top"
+                       Text="saves"
+                       FontWeight="SemiBold"
+                       Margin="0,0,0,6"/>
+
+            <StackPanel DockPanel.Dock="Bottom" Spacing="6" Margin="0,8,0,0">
+                <Button Content="load selected" Click="OnLoadSelected"/>
+                <Button Content="load last save" Click="OnLoadLast"/>
+                <Button Content="refresh" Click="OnRefreshSaves"/>
+            </StackPanel>
+
+            <ListBox x:Name="SavesList"/>
+        </DockPanel>
+
+        <Grid Grid.Row="2" Grid.ColumnSpan="2" ColumnDefinitions="Auto,*,Auto">
+            <TextBlock Text="command:"
+                       VerticalAlignment="Center"
+                       Margin="0,0,8,0" />
+            <TextBox x:Name="CommandBox"
+                     Grid.Column="1"
+                     PlaceholderText="help | ls chars | select A B | start | save myGame | load"
+                     KeyDown="OnCommandKeyDown" />
+            <Button Grid.Column="2"
+                    Content="run"
+                    Margin="8,0,0,0"
+                    Click="OnRunCOmmand" />
+        </Grid>
+    </Grid>
 </Window>
