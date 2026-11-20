@@ -218,7 +218,7 @@ public class GameManager(IRenderer renderer, IRepository saves)
         if (abilityName != null) ability = FindAbility(abilityName);
 
         int value = ability!.Execute(user, target);
-        string desc = $"{userName} used {abilityName}" + (target != null ? $"on {targetName}" : "");
+        string desc = $"{userName} used {abilityName}" + (target != null ? $" on {targetName}" : "");
         _renderer.WriteLine($"{desc} for {value} dmg, {targetName}'s current hp: {target?.Health}");
         _currentBattle?.Record(userName, "Ability", targetName, value, desc);
     }
