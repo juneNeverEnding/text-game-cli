@@ -1,6 +1,6 @@
-# Text Game CLI
+# Text Game
 
-Console-based text game made using C# and .NET  
+A C# / .NET text game with an Avalonia GUI and CLI  
 Create characters, get them items and abilities, select the characters and start the battle  
 
 ---
@@ -15,6 +15,15 @@ Create characters, get them items and abilities, select the characters and start
 - Turn based combat system (`act` command)
 - Battle history (`history` command)
 - Save and load the game (`save <name>` and `load [name]` commands)
+- Avalonia graphical interface
+- Command line interface
+
+---
+
+## Projects
+
+- `text-game-cli` has the game functional, commands, persistence, CLI
+- `text-game-gui` is the avalonia graphical interface
 
 ---
 
@@ -55,6 +64,16 @@ text-game-cli/
 |   |   |---JsonRepository.cs
 |---Program.cs
 |---text-game-cli.csproj
+
+text-game-gui/
+|---App.axaml
+|---App.axaml.cs
+|---app.manifest
+|---GuiRenderer.cs          # gui rendering
+|---MainWindow.axaml        # main gui
+|---MainWindow.axaml.cs     # gui code
+|---Program.cs
+|---text-game-gui.csproj
 ```
 
 ---
@@ -126,11 +145,22 @@ There are named saves, and there's also the last save which is called `_last.jso
 | `help`                                        | Shows available commands              |
 | `exit`                                        | Exits the CLI                         |
 
+You can also enter `cancel` to stop the creation of a character, item or an ability
+
 ---
 
 ## How to run
 
+### CLI
+
 ```bash
-dotnet restore
-dotnet run
+dotnet restore text-game-cli/text-game-cli.csproj
+dotnet run --project text-game-cli/text-game-cli.csproj
+```
+
+### GUI
+
+```bash
+dotnet restore text-game-gui/text-game-gui.csproj
+dotnet run --project text-game-gui/text-game-gui.csproj
 ```
