@@ -1,6 +1,6 @@
 using Avalonia.Controls;
 
-namespace text_game_gui;
+namespace TextGameGUI;
 
 public partial class MainWindow : Window
 {

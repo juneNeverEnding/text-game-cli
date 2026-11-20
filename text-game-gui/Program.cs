@@ -1,7 +1,7 @@
 ﻿using Avalonia;
 using System;
 
-namespace text_game_gui;
+namespace TextGameGUI;
 
 class Program
 {
