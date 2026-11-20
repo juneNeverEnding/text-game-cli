@@ -41,21 +41,18 @@ public class Character
     {
         int Damage = DamageCalculator.CalculatePhysical(this, target);
         target.TakeDamage(Damage);
-        Console.WriteLine($"{Name} attacks {target.Name} and dealt {Damage} damage\n{target.Name}'s current health: {target.Health}");
         target._isDefending = false; //incase the target is defending
     }
 
     public void Heal(int amount, Character target)
     {
         target.ReceiveHeal(amount);
-        Console.WriteLine($"{Name} heals {target.Name} for {amount}\n{target.Name}'s current health: {target.Health}");
     }
 
     public void Defend()
     {
         if (!IsAlive) return;
         _isDefending = true;
-        Console.WriteLine($"{Name} takes a defensive stance");
     }
 
 
@@ -65,7 +62,6 @@ public class Character
         Health = Math.Max(0, Health - amount);
         if (Health <= 0)
         {
-            Console.WriteLine($"\n{Name} has been defeated");
             IsAlive = false;
         }
     }
@@ -83,7 +79,6 @@ public class Character
         var ability = _abilities.FirstOrDefault(a => a.Name == abilityName);
         if (ability is null)
         {
-            Console.WriteLine($"{Name} does not have the ability '{abilityName}'");
             return;
         }
         ability.Execute(this, target);
@@ -94,7 +89,6 @@ public class Character
         if (!IsAlive) return;
         item.Apply(this);
         _inventory.Add(item);
-        Console.WriteLine($"{Name} equips {item.Name}\n");
     }
 
     internal void AddItem(IItem item) => _inventory.Add(item);

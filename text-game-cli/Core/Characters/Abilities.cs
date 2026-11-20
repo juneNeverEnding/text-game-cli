@@ -14,7 +14,6 @@ public class LightningBolt : IAbility
 
         int magicDamage = DamageCalculator.CalculateMagic(user, target);
         target.TakeDamage(magicDamage);
-        Console.WriteLine($"{user.Name} casts a {Name} on {target.Name} and dealt {magicDamage} damage\n{target.Name}'s current health: {target.Health}");
         return magicDamage;
     }
 }
@@ -28,7 +27,6 @@ public class Fireball : IAbility
 
         int magicDamage = DamageCalculator.CalculateMagic(user, target);
         target.TakeDamage(magicDamage);
-        Console.WriteLine($"{user.Name} casts a {Name} on {target.Name} and dealt {magicDamage} damage\n{target.Name}'s current health: {target.Health}");
         return magicDamage;
     }
 }

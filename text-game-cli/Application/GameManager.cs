@@ -170,6 +170,7 @@ public class GameManager(IRenderer renderer, IRepository saves)
         int damage = DamageCalculator.CalculatePhysical(attacker, target);
         string desc = $"{attackerName} attacks {targetName} for {damage} dmg";
         attacker.Attack(target);
+        _renderer.WriteLine($"{desc}, {targetName}'s current hp: {target.Health}");
         _currentBattle?.Record(attackerName, "attack", targetName, damage, desc);
     }
 
@@ -187,6 +188,7 @@ public class GameManager(IRenderer renderer, IRepository saves)
 
         string desc = $"{healerName} heals {targetName} for {amount}";
         healer.Heal(amount, target);
+        _renderer.WriteLine($"{desc}, {targetName}'s current hp: {target.Health}");
         _currentBattle?.Record(healerName, "heal", targetName, amount, desc);
     }
 
@@ -198,6 +200,7 @@ public class GameManager(IRenderer renderer, IRepository saves)
         character?.Defend();
 
         string desc = $"{characterName} takes a defensive stance";
+        _renderer.WriteLine(desc);
         _currentBattle?.Record(characterName, "defend", null, 0, desc);
     }
 
@@ -216,6 +219,7 @@ public class GameManager(IRenderer renderer, IRepository saves)
 
         int value = ability!.Execute(user, target);
         string desc = $"{userName} used {abilityName}" + (target != null ? $"on {targetName}" : "");
+        _renderer.WriteLine($"{desc} for {value} dmg, {targetName}'s current hp: {target?.Health}");
         _currentBattle?.Record(userName, "Ability", targetName, value, desc);
     }
 
