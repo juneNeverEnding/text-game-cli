@@ -149,18 +149,47 @@ You can also enter `cancel` to stop the creation of a character, item or an abil
 
 ---
 
-## How to run
 
-### CLI
+## Download (release builds)
 
+[GitHub Releases](https://github.com/juneNeverEnding/text-game-cli/releases)
+
+### Requirements
+**None** for the releases (self-contained, .NET runtime is included)  
+To build from source you need .NET 10 SDK
+
+### How to run
+
+#### Windows
+
+CLI
+1. Download `text-game-cli-win-x64.zip`
+2. Extract
+3. Run `text-game-cli.exe`
+
+GUI
+1. Download `text-game-gui-win-x64.zip`
+2. Extract
+3. Run `text-game-gui.exe`
+
+#### Linux
+
+CLI
+1. Download `text-game-cli-linux-x64.zip`
+2. Extract
+3. `chmod +x text-game-cli`
+4. `./text-game-cli`
+
+GUI
+1. Download `text-game-gui-linux-x64.zip`
+2. Extract
+3. `chmod +x text-game-gui`
+4. `./text-game-gui`
+
+
+### Build from source
 ```bash
-dotnet restore text-game-cli/text-game-cli.csproj
+dotnet restore
 dotnet run --project text-game-cli/text-game-cli.csproj
-```
-
-### GUI
-
-```bash
-dotnet restore text-game-gui/text-game-gui.csproj
 dotnet run --project text-game-gui/text-game-gui.csproj
 ```
