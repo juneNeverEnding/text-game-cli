@@ -188,6 +188,7 @@ GUI
 3. `chmod +x text-game-gui`
 4. `./text-game-gui`
 
+---
 
 ### Build from source
 ```bash
