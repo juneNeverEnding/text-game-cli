@@ -172,6 +172,8 @@ GUI
 2. Extract
 3. Run `text-game-gui.exe`
 
+---
+
 #### Linux
 
 CLI
